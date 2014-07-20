@@ -1,6 +1,13 @@
+############################################################
+# Dockerfile to build Nginx with spdy module enabled
+# Based on Ubuntu
+############################################################
+
+# Set the base image to Ubuntu
 FROM ubuntu:14.04
-MAINTAINER Claudio Petrini <dod91@hotmail.it>
-# Forked from https://github.com/dgageot/ngxpagespeed (David Gageot <david@gageot.net>)
+
+# Author / Maintainer
+MAINTAINER Claudio Petrini <dod91@hotmail.it> (forked from https://github.com/dgageot/ngxpagespeed )
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV NGINX_VERSION 1.7.3
@@ -26,11 +33,13 @@ RUN cd /tmp/nginx-${NGINX_VERSION} \
 RUN rm -Rf /tmp/nginx-${NGINX_VERSION}
 
 EXPOSE 80
-EXPOSE 443
+# EXPOSE 443
 
 VOLUME ["/etc/nginx/sites-enabled"]
 WORKDIR /etc/nginx/
-CMD ["/usr/sbin/nginx"]
 
 # Configure nginx
-COPY nginx.conf /etc/nginx/conf/nginx.conf
+ADD nginx.conf /etc/nginx/conf/nginx.conf
+ADD sites-enabled/ /etc/nginx/conf/sites-enabled/
+
+CMD ["/usr/sbin/nginx"]
